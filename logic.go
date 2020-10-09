@@ -2,6 +2,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"strings"
 )
 
@@ -12,17 +13,25 @@ func Pong(c *gin.Context)  {
 	})
 }
 
-func SubString(c *gin.Context) {
+func (h *_DataHandler) EndPointDataCleansing(c *gin.Context) {
+
 	var input text
 	e := c.BindJSON(&input)
 	if e != nil {
 		fmt.Println(e)
 	}
+
+	result, err := h.SubString(input)
+	if err != "" {
+		c.JSON(http.StatusBadRequest, err)
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func (h *_DataHandler) SubString(input text)(result []return_ans, err string){
 	var Stringlen = len(input.String)
 	if(Stringlen > 255 || Stringlen < 20){
-		c.JSON(400,gin.H{
-			"error" : "error len out 255 or 20",
-		})
 		return
 	}
 	var lowercase = strings.ToLower(input.String)
@@ -48,16 +57,13 @@ func SubString(c *gin.Context) {
 				String_data:  word,
 				Count: 1, //count begin 1
 			}
-
 		}
+	}
+	fmt.Println("inputString : ", input.String)
 
+	for _, val := range MapCount {
+		result = append(result, *val)
 	}
 
-	//for i := 0 ;i< len(Split);i++{
-	//		result[0] = map[string]int{"foo": 1, "bar": 2}
-	//}
-
-	c.JSON(200, gin.H{
-		"message": len,
-	})
+	return
 }

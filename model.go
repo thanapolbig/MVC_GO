@@ -7,6 +7,7 @@ type text struct {
 type return_ans struct {
 	String_data	string		`json:"String_data"`
 	Count 		int64		`json:"count"`
-	
+}
+type _DataHandler struct {
 
 }
